@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" href="../static/css/blog.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
+    <script type="text/javascript" src="../static/js/jquery.js"></script>
+</head>
+<body id="botAgregar">
+<script type="text/javascript">$.AutomLeafStart({leafsfolder:"../static/images/",howmanyimgsare:8,initialleafs:10,maxYposition:-10,multiplyclick:true,multiplynumber:2,infinite:true,fallingsequence:4000});$("#botAgregar").on("click",function(){$.AutomLeafAdd({leafsfolder:"../static/images/",add:8,})});</script>
+<div class="layout" style="width:1400px; margin:auto; line-height:30px; margin-top:90px;">
+<header>
+    <div class="logo"></div>
+    <div class="content">
+        <div class="home">
+            <a href="/">首页</a>
+        </div>
+        <div class="find">
+            <a href="/">发现</a>
+        </div>
+        <div class="code">
+            <a href="/">源码</a>
+        </div>
+    </div>
+    {% if user %}
+    <div class="person">
+        <a>{{ user.name }}</a>
+        <div style="margin-top: 3px; float: left">
+                <img src="../static/img/person.png" width="20" height="20" >
+        </div>
+        <div class="person-content">
+            <p><a href="/blogs/create">日志添加</a></p>
+            <p><a href="/blogs">日志管理</a></p>
+            <p><a href="/signout">退出登录</a></p>
+        </div>
+    </div>
+    {% else %}
+        <div class="person">
+            <a href="/signin">登录</a>
+        </div>
+    {% endif %}
+</header>
+<div>
+    {% for blog in blogs %}
+    <article>
+    <div style="margin-left: 20px;">
+        <h2><a href="/blog/{{blog.id}}" style="color: #0f88eb">{{blog.name}}</a></h2>
+        <p style="font-size: 12px; font-family: 'Microsoft Yahei';color: #737373">发表于{{blog.created_at|datetime}}</p>
+        <p>{{blog.summary}}</p>
+        <p><a href="/blog/{{blog.id}}" style="color: #0f88eb">继续阅读>></a></p>
+    </div>
+    </article>
+    {% endfor %}
+</div>
+<footer>
+    <p>
+        友情链接:
+        <a href="https://github.com/Lvconl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../static/img/GitHub.png"></a>
+        <a href="/">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../static/img/school.png"></a>
+    </p>
+    <p>Powered by <a href="mailto:835132735@qq.com">lvconl </a>Copyright @copy; 2018.</p>
+    <a href="https://github.com/Lvconl" target="_blank">lvconl</a>.All right reserved.
+</footer>
+</div>
+</body>
+</html>
