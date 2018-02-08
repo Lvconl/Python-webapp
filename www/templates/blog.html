@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ blog.name }}</title>
+    <link rel="stylesheet" href="../static/css/blog.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
+    <script type="text/javascript" src="../static/js/jquery.js"></script>
+    <script src="../static/js/sha1.min.js"></script>
+    <script src="../static/js/sticky.min.js"></script>
+    <script src="../static/js/vue.min.js"></script>
+    <script src="../static/js/awesome.js"></script>
+    <script>
+var comment_url = '/api/blogs/{{ blog.id }}/comments';
+$(function () {
+    var $form = $('#form-comment');
+    $form.submit(function (e) {
+        e.preventDefault();
+        $form.showFormError('');
+        var content = $form.find('textarea').val().trim();
+        if (content==='') {
+            alert('请输入评论内容');
+            return;
+        }
+        $form.postJSON(comment_url, { content: content }, function (err, result) {
+            if (err) {
+                alert(err);
+                return;
+            }
+            refresh();
+        });
+    });
+});
+</script>
+
+</head>
+<body id="botAgregar">
+<script type="text/javascript">$.AutomLeafStart({leafsfolder:"../static/images/",howmanyimgsare:8,initialleafs:10,maxYposition:-10,multiplyclick:true,multiplynumber:2,infinite:true,fallingsequence:4000});$("#botAgregar").on("click",function(){$.AutomLeafAdd({leafsfolder:"../static/images/",add:8,})});</script>
+<div class="layout" style="width:1400px; margin:auto; line-height:30px; margin-top:90px;">
+<header>
+    <div class="logo"></div>
+    <div class="content">
+        <div class="home">
+            <a href="/">首页</a>
+        </div>
+        <div class="find">
+            <a href="https://github.com/">发现</a>
+        </div>
+        <div class="code">
+            <a href="https://github.com/Lvconl/Python-webapp/tree/version.2">源码</a>
+        </div>
+    </div>
+    {% if user %}
+    <div class="person">
+        <a>{{ user.name }}</a>
+        <div style="margin-top: 3px; float: left">
+                <img src="../static/img/person.png" width="20" height="20" >
+        </div>
+        <div class="person-content" style="font-size: 19px;">
+            {% if user.admin == 1 %}
+            <p><a href="/blogs/create"><img src="../static/img/plus.png" width="16" height="16">日志添加</a></p>
+            <p><a href="/blogs"><img src="../static/img/setting.png" width="16" height="16">日志管理</a></p>
+            {% endif %}
+            <p><a href="/user/edit"><img src="../static/img/info.png" height="16" width="16">修改昵称</a>
+            <p><a href="/signout"><img src="../static/img/exit.png" width="16" height="16">退出登录</a></p>
+        </div>
+    </div>
+    {% else %}
+        <div class="person">
+            <a href="/signin">登录</a>
+        </div>
+    {% endif %}
+</header>
+<div class="blog-content">
+        <article>
+            <div style="margin-left: 20px;">
+                <h2>{{ blog.name }}</h2>
+                <hr style="margin-right: 20px;">
+                <p style="font-size: 17px;">{{ blog.html_content|safe }}</p>
+                <p style="font-size: 12px;">发表于{{ blog.created_at|datetime }}</p>
+            </div>
+        </article>
+    </div>
+     <div class="comment" style="border-radius: 10px;background: white;">
+     <div style="margin-left: 20px">
+     {% if user %}
+        <h3>发表评论</h3>
+        <article>
+            <header>
+                <img width="30" height="30" src="{{ user.image }}" style="border-radius: 10px;">
+                <h3>{{ user.name }}</h3>
+            </header>
+            <div style="margin-top: 50px;">
+                <form id="form-comment">
+                    <div>
+                        <textarea rows="6" placeholder="说点什么吧" style="resize:none; width: 90%;border-radius: 10px;"></textarea>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <button type="submit" style="margin-left: 5px;border-radius: 3px;background-color: #0f88eb;color: white;border:none;font-size: 16px"><img src="../static/img/comment.png" width="16" height="16">发表评论</button>
+                    </div>
+                </form>
+            </div>
+        </article>
+             <hr style="margin-right: 20px">
+         {% endif %}
+            <h3>最新评论</h3>
+                {% for comment in comments %}
+                    <article>
+                        <header>
+                            <img width="50" height="50" src="{{ comment.user_image }}" style="border-radius: 5px;">
+                            {{ comment.user_name }} {% if comment.user_id==blog.user_id %}(作者){% endif %}发表于{{ comment.created_at|datetime }}:
+                        </header>
+                    <div style="margin-left: 55px;font-size: 17px;">
+                        <p>{{ comment.html_content|safe }}</p>
+                    </div>
+                        <hr style="margin-right: 20px;">
+                    </article>
+                {% else %}
+                <p>还没有人评论...</p>
+                {% endfor %}
+         </div>
+    </div>
+<footer>
+    <p>
+        友情链接:
+        <a href="https://github.com/Lvconl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../static/img/GitHub.png"></a>
+        <a href="/">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../static/img/school.png"></a>
+    </p>
+    <p>Powered by <a href="mailto:835132735@qq.com">lvconl </a>Copyright @copy; 2018.</p>
+    <a href="https://github.com/Lvconl" target="_blank">lvconl</a>.All right reserved.
+</footer>
+</div>
+</body>
+</html>
